@@ -6,9 +6,8 @@ export interface IMessage {
   receiver: string;
   title: string;
   body: string;
+  date: string;
 }
-
-//сделать мои сообщения и отправленные фронт и бэк. автокомплит для юзеров.
 
 export const messagesApi = createApi({
   reducerPath: "messagesApi",
@@ -23,7 +22,7 @@ export const messagesApi = createApi({
       },
       providesTags: ["Messages"],
     }),
-    sendMessage: build.mutation<void, Omit<IMessage, "id">>({
+    sendMessage: build.mutation<void, Omit<IMessage, "id" | "date">>({
       query(data) {
         return {
           url: "/messages/send",

@@ -1,24 +1,27 @@
-import { Box, Button, Grid, TextField } from "@mui/material";
+import { Autocomplete, Box, Button, Grid, TextField } from "@mui/material";
 import { FC } from "react";
 import { IMessage, useSendMessageMutation } from "../api/messages.api";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import { useGetUsersQuery, useLazyGetUsersQuery } from "../api/users.api";
 
-type ISendMessageForm = Omit<IMessage, "id" | "sender">;
+type ISendMessageForm = Omit<IMessage, "id" | "sender" | "date">;
 
 export const SendMessageForm: FC = () => {
   const [sendMessage] = useSendMessageMutation();
+  const { data } = useGetUsersQuery();
+  const [refetchUsers] = useLazyGetUsersQuery();
   const { currentUserName } = useSelector((state: RootState) => state.app);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ISendMessageForm>();
+  const { register, handleSubmit, reset, control, formState } =
+    useForm<ISendMessageForm>({
+      defaultValues: { receiver: "", body: "", title: "" },
+    });
 
   const onSubmit: SubmitHandler<ISendMessageForm> = (data) => {
     sendMessage({ ...data, sender: currentUserName });
+    reset();
   };
 
   return (
@@ -27,7 +30,7 @@ export const SendMessageForm: FC = () => {
       onSubmit={handleSubmit(onSubmit)}
       noValidate
       sx={{ mt: 3 }}
-      width="100%"
+      width="500px"
     >
       <Grid
         container
@@ -37,37 +40,53 @@ export const SendMessageForm: FC = () => {
         flexDirection="column"
       >
         <Grid item xs={12} width="100%">
-          <TextField
-            {...register("receiver", { required: true })}
-            error={!!errors.receiver}
-            helperText={!!errors.receiver && "Enter receiver"}
-            size="small"
-            label="Receiver"
-            fullWidth
+          <Controller
+            render={({ field: { onChange, value, onBlur } }) => (
+              <Autocomplete
+                onOpen={() => refetchUsers()}
+                freeSolo
+                value={value}
+                onBlur={onBlur}
+                onChange={(event, item) => onChange(item)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    size="small"
+                    placeholder="Enter receiver"
+                  />
+                )}
+                options={data?.map(({ username }) => username) || []}
+              />
+            )}
+            name="receiver"
+            control={control}
           />
         </Grid>
         <Grid item xs={12} width="100%">
           <TextField
             {...register("title", { required: true })}
-            error={!!errors.title}
-            helperText={!!errors.title && "Enter title"}
             size="small"
-            label="Title"
             fullWidth
+            placeholder="Enter your title"
           />
         </Grid>
         <Grid item xs={12} width="100%">
           <TextField
             {...register("body", { required: true })}
-            error={!!errors.body}
-            helperText={!!errors.body && "Enter body"}
-            size="small"
-            label="Body"
+            placeholder="Enter your text"
+            multiline
+            minRows={10}
             fullWidth
           />
         </Grid>
         <Grid item xs={12} width="100%">
-          <Button type="submit" variant="contained" sx={{ mt: 3 }} fullWidth>
+          <Button
+            disabled={!formState.isValid}
+            type="submit"
+            variant="contained"
+            sx={{ mt: 3 }}
+            fullWidth
+          >
             Send message
           </Button>
         </Grid>

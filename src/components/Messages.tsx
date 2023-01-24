@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Card, Stack, Typography } from "@mui/material";
 import { FC } from "react";
 import { useGetMessagesQuery } from "../api/messages.api";
 import { useSelector } from "react-redux";
@@ -11,15 +11,26 @@ export const Messages: FC = () => {
   });
 
   return (
-    <Box>
+    <Stack spacing="10px" width="600px" sx={{ overflowY: "auto" }}>
       {data?.map((message) => (
-        <Box key={message.id}>
-          {/*<Typography>{message.id}</Typography>*/}
-          {/*<Typography>{message.sender}</Typography>*/}
-          {/*<Typography>{message.title}</Typography>*/}
-          <Typography>{message.body}</Typography>
-        </Box>
+        <Card key={message.id} sx={{ height: "300px" }}>
+          <Stack>
+            <Typography p="5px" borderBottom="1px solid #dbdbdb">
+              {message.date}
+            </Typography>
+            <Typography p="5px" borderBottom="1px solid #dbdbdb">
+              {message.receiver}
+            </Typography>
+            <Typography p="5px" borderBottom="1px solid #dbdbdb">
+              {message.sender}
+            </Typography>
+            <Typography p="5px" borderBottom="1px solid #dbdbdb">
+              {message.title}
+            </Typography>
+            <Typography p="5px">{message.body}</Typography>
+          </Stack>
+        </Card>
       ))}
-    </Box>
+    </Stack>
   );
 };

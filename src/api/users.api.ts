@@ -1,12 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export interface IUser {
-  id: string;
-  email: string;
   username: string;
-  status: boolean;
-  registrationDate: string;
-  lastVisit: string;
 }
 
 type IUsersApiResponse = IUser[];
@@ -24,7 +19,18 @@ export const usersApi = createApi({
       },
       providesTags: ["User"],
     }),
+    sendUser: build.mutation<void, IUser>({
+      query(data) {
+        return {
+          url: "/users/Login",
+          method: "post",
+          body: data,
+        };
+      },
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
-export const { useGetUsersQuery } = usersApi;
+export const { useGetUsersQuery, useSendUserMutation, useLazyGetUsersQuery } =
+  usersApi;
