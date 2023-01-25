@@ -27,10 +27,11 @@ export const Messages: FC = () => {
         borderRadius: "6px",
         display: "flex",
         flexDirection: "column",
+        minWidth: "450px",
       }}
     >
       {data?.map((message) => (
-        <Paper key={message.id} variant="outlined" sx={{ width: "400px" }}>
+        <Paper key={message.id} variant="outlined">
           <Stack>
             <Box
               display="flex"
