@@ -7,7 +7,7 @@ import { Header } from "./Header";
 export const Home: FC = () => (
   <Box>
     <Header />
-    <Stack direction="row-reverse" justifyContent="space-between" p="20px">
+    <Stack direction="row-reverse" justifyContent="space-between" p="20px 80px">
       <SendMessageForm />
       <Messages />
     </Stack>

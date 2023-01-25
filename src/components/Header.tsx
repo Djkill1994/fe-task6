@@ -10,7 +10,15 @@ export const Header: FC = () => {
   const dispatch = useDispatch();
 
   return (
-    <Stack justifyContent="space-between" p="5px 10px" direction="row">
+    <Stack
+      justifyContent="space-between"
+      p="5px 10px"
+      direction="row"
+      borderBottom="1px solid #dbdbdb"
+      bgcolor="white"
+      position="sticky"
+      top="0"
+    >
       <Typography variant="h6">Hello: {currentUserName}</Typography>
       <Button onClick={() => dispatch(setCurrentUserName(""))}>
         <LogoutIcon />

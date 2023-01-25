@@ -10,7 +10,7 @@ export const App: FC = () => {
   const { currentUserName } = useSelector((state: RootState) => state.app);
 
   return (
-    <Stack height="100vh" bgcolor="#FAFAFA">
+    <Stack bgcolor="#FAFAFA">
       <Toaster position="top-right" />
       {currentUserName ? <Home /> : <LoginForm />}
     </Stack>

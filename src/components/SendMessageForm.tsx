@@ -29,8 +29,14 @@ export const SendMessageForm: FC = () => {
       component="form"
       onSubmit={handleSubmit(onSubmit)}
       noValidate
-      sx={{ mt: 3 }}
       width="500px"
+      height="450px"
+      border="1px solid #dbdbdb"
+      p="12px"
+      bgcolor="white"
+      borderRadius="6px"
+      position="sticky"
+      top="66px"
     >
       <Grid
         container

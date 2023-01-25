@@ -9,7 +9,6 @@ type IUsersApiResponse = IUser[];
 export const usersApi = createApi({
   reducerPath: "usersApi",
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BACKEND_URL }),
-  tagTypes: ["User"],
   endpoints: (build) => ({
     getUsers: build.query<IUsersApiResponse, void>({
       query() {
@@ -17,20 +16,18 @@ export const usersApi = createApi({
           url: "/users",
         };
       },
-      providesTags: ["User"],
     }),
-    sendUser: build.mutation<void, IUser>({
+    loginUser: build.mutation<void, IUser>({
       query(data) {
         return {
-          url: "/users/Login",
+          url: "/users/login",
           method: "post",
           body: data,
         };
       },
-      invalidatesTags: ["User"],
     }),
   }),
 });
 
-export const { useGetUsersQuery, useSendUserMutation, useLazyGetUsersQuery } =
+export const { useGetUsersQuery, useLoginUserMutation, useLazyGetUsersQuery } =
   usersApi;

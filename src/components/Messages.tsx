@@ -1,8 +1,17 @@
-import { Card, Stack, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { FC } from "react";
 import { useGetMessagesQuery } from "../api/messages.api";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import { ExpandMore } from "@mui/icons-material";
 
 export const Messages: FC = () => {
   const { currentUserName } = useSelector((state: RootState) => state.app);
@@ -11,26 +20,43 @@ export const Messages: FC = () => {
   });
 
   return (
-    <Stack spacing="10px" width="600px" sx={{ overflowY: "auto" }}>
+    <Paper
+      sx={{
+        padding: "12px",
+        gap: "10px",
+        borderRadius: "6px",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       {data?.map((message) => (
-        <Card key={message.id} sx={{ height: "300px" }}>
+        <Paper key={message.id} variant="outlined" sx={{ width: "400px" }}>
           <Stack>
-            <Typography p="5px" borderBottom="1px solid #dbdbdb">
-              {message.date}
-            </Typography>
-            <Typography p="5px" borderBottom="1px solid #dbdbdb">
-              {message.receiver}
-            </Typography>
-            <Typography p="5px" borderBottom="1px solid #dbdbdb">
-              {message.sender}
-            </Typography>
-            <Typography p="5px" borderBottom="1px solid #dbdbdb">
-              {message.title}
-            </Typography>
-            <Typography p="5px">{message.body}</Typography>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              p="6px 24px 0 24px"
+            >
+              <Typography fontWeight={800} fontSize="16px">
+                {message.sender}
+              </Typography>
+              <Typography color="gray" fontSize="12px">
+                {message.date}
+              </Typography>
+            </Box>
+            <Accordion disableGutters>
+              <AccordionSummary expandIcon={<ExpandMore />}>
+                <Typography fontWeight={550} fontSize="14px">
+                  {message.title}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>{message.body}</Typography>
+              </AccordionDetails>
+            </Accordion>
           </Stack>
-        </Card>
+        </Paper>
       ))}
-    </Stack>
+    </Paper>
   );
 };
